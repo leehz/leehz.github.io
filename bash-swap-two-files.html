@@ -1,0 +1,68 @@
+<HTML>
+<HEAD>
+<!-- AUTHOR: Sunpreet Jassal
+     COURSE: SENG 265 LF02 -->
+
+<TITLE>Bash: Swap contents of two files</TITLE>
+</HEAD>
+<style type="text/css">
+body           { font-family:Arial, Serif; }
+code           { background-color:#EEE;
+                 font-family:Courier New, Courier, Lucida Console;
+                 font-size:11pt;
+                 display: block; }
+code.inline    { background-color:#FFF;
+                 font-size:11pt;
+                 display:inline; }
+</style>
+<BODY>
+<H2>Bash: Swap contents of two files</H2>
+<P><B>Question:</B><br>
+<span>How to swap contents of two files in any directory using bash?</span>
+</P>
+<P><B>Answer:</B><br>
+<span>Add a function that swaps content of two files in your <code class="inline">.bashrc</code>.</span>
+</P>
+<P><B>Example:</B><br>
+<code>
+# swap: Swaps contents of two files<br>
+# &nbsp;&nbsp;&nbsp;param1: the file to be swapped<br>
+# &nbsp;&nbsp;&nbsp;param2: the file to be swapped<br>
+function swap() # swap 2 filenames around<br>
+{<br>
+&nbsp;&nbsp;&nbsp;if [[ -e "$1" && -e "$2" ]]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# if files exist<br>
+&nbsp;&nbsp;&nbsp;then<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local TMPFILE=tmp.$$<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mv "$1" $TMPFILE<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mv "$2" "$1"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mv $TMPFILE "$2"<br>
+&nbsp;&nbsp;&nbsp;else<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo "Error: Make sure the files exist."<br>
+&nbsp;&nbsp;&nbsp;fi<br>
+}<br>
+</code>
+</P>
+<P><B>Explanation:</B><br>
+<span>The function first tests if the files exist using the <code class="inline">-e</code>
+test operator. The if/then construct tests whether the exit status of the <code class="inline">-e</code>
+operator returns 0 (means true in UNIX). If it does, the commands following <code class="inline">then</code> are executed;
+otherwise, the commands following <code class="inline">else</code> are run. Then, the function makes a temporary copy
+of the first file (whose name/location is specified by the positional parameter, <code class="inline">$1</code>)
+The special parameter, <code class="inline">$$</code>, stores the process ID
+(or PID) of the script. This variable is usually used to have unique filenames.</span>
+The function moves the second file to the first file (<code class="inline">$2</code>) and copies
+the temporary file into the second file. The result is that the contents of the files are
+swapped while their names are the same. So to undo swap, you can execute swap command again
+with the same parameters. Note that the temporary file gets deleted when the function exits
+and its declared <code class="inline">local</code> in the function. Also note that since we
+are testing for more than one condition, we need to have another pair of square brackets
+(<code class="inline">[,]</code>) surrounding the <code class="inline">if</code> condition.<br>
+So to be able to run this function anywhere using bash, you must source it, or simply add
+it to your <code class="inline">.bashrc</code>.
+</P>
+<P><B>Attribution:</B><br>
+<span>Some code borrowed from <a href="http://db.ilug-bom.org.in/Documentation/abs-guide/sample-bashrc.html">
+http://db.ilug-bom.org.in/Documentation/abs-guide/sample-bashrc.html</a>.</span>
+</P>
+</BODY>
+</HTML>

@@ -1,0 +1,65 @@
+<HTML>
+<HEAD>
+<!-- AUTHOR: Sunpreet Jassal
+     COURSE: SENG 265 LF02 -->
+
+<TITLE>Bash: Customization of prompt</TITLE>
+</HEAD>
+<style type="text/css">
+body           { font-family:Arial, Serif; }
+code           { background-color:#EEE;
+                 font-family:Courier New, Courier, Lucida Console;
+                 font-size:11pt; }
+code.inline    { background-color:#FFF;
+                 font-size:11pt; }
+</style>
+<BODY>
+<H2>Bash: Customization of prompt</H2>
+<P><B>Question:</B><br>
+<span>How to display a custom string at the bash prompt?</span>
+</P>
+<P><B>Answer:</B><br>
+<span>Use the PS1 shell variable to display a custom string like the
+following:</span>
+</P>
+<P><B>Example:</B><br>
+<code>
+> PS1="\u@\h \w> "
+</code>
+</P>
+<P><B>Explanation:</B><br>
+<span>Bash uses the prompt string, PS1 shell variable to determine how 
+to display the prompt.
+The prompt string for the example above looks like follows:<br><br>
+<code>s265s0**@a00 /home/directory> <i>type some command 
+here</i></code><br>
+<br>
+<code class="inline">\u</code> displays the username, <code 
+class="inline">\h</code> displays the hostname
+and <code class="inline">\w</code> displays the current directory. If 
+you log in your home
+computer, the hostname will be different. There is also another way to 
+display
+the current directory by using <code class="inline">\${pwd}</code> as 
+follows:<br><br>
+<code>
+> PS1="\n[\u@\h \${pwd}"
+</code><br><br>
+
+<p> [alan's comment: ] </p>
+<p> In the above example, we are giving an indirect reference to a
+shell variable, by putting a \ before the $. This means wait until
+evaluation time before getting the value of the variable.
+This is how the prompt changes when you change directories. If we left out the \, then the prompt would have the value of the current working directory and would remain the same after changing directories.
+</p>
+<P><B>Attribution:</B><br>
+
+<span>Elaborated from Alan's Lab Notes. See a list of other special characters 
+that you
+can use in PS1 at <a 
+href="http://www.faqs.org/docs/bashman/bashref_74.html#SEC81">
+http://www.faqs.org/docs/bashman/bashref_74.html#SEC81</a>.</span></P>
+</BODY>
+</HTML>
+
+
