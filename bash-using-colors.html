@@ -1,0 +1,108 @@
+<HTML>
+<HEAD>
+<!-- AUTHOR: Sunpreet Jassal
+     COURSE: SENG 265 LF02 -->
+
+<TITLE>Bash: Using Colors</TITLE>
+</HEAD>
+<style type="text/css">
+body           { font-family:Arial, Serif; }
+code           { background-color:#EEE;
+                 font-family:Courier New, Courier, Lucida Console;
+                 font-size:11pt; }
+code.inline    { background-color:#FFF;
+                 font-size:11pt; }
+i              { color:#AAA; }
+</style>
+<BODY>
+<H2>Bash: Using Colors</H2>
+<P><B>Question:</B><br>
+<span>How to use colors to display information in bash?</span>
+</P>
+<P><B>Answer:</B><br>
+<span>Use ANSI escape sequences to set text properties like foreground and
+background colors.</span>
+</P>
+<P><B>Example:</B><br>
+<code>echo -e "\e[1;34mThis is a blue text.\e[0m"</code>
+</P>
+<P><B>Explanation:</B><br>
+<span>Bash uses numeric codes to set attributes of the text to be displayed.<br>
+<br>
+<u>Attribute codes:</u><br>
+00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed <br>
+<br>
+<u>Text color codes:</u><br>
+30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white<br>
+<br>
+<u>Background color codes:</u><br>
+40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white<br>
+<br>
+In the example above, me used the ANSI escape sequence <code class="inline">\e[<i>attribute
+code</i>;<i>text color code</i>m</code> to display a blue text. Therefore, we have to use
+<code class="inline">-e</code> option in calling <code class="inline">echo</code>
+to escape the input. Note that the color
+effect had to be ended by <code class="inline">\e[0m</code> to prevent the display of
+the prompt with different colors. However, the effects are sometimes interesting. I
+encourage you to play around with it.<br>
+<br>
+To have a background, we must use the background color codes. The sequence then becomes
+<code class="inline">\e[<i>attribute code</i>;<i>text color code</i>;<i>background
+color code</i>m</code>. As you can guess, any missing code is simply taken as zero value
+by bash. Provided you shell supports 8-bit colors (the new Cygwin version 1.43 and
+a00.seng.engr do), you can display a colored welcome message when you log into bash
+by typing the following into your <code class="inline">.bashrc</code>:<br>
+<br>
+<code style="display:block;">
+green='\e[0;32m'        # '\e[1;32m' is too bright for white bg.<br>
+endColor='\e[0m'<br>
+<br>
+# Display welcome message<br>
+echo -e "${green}Welcome \e[5;32;47m $USER \n${endColor}"<br>
+</code>
+<br>
+It is generally a good idea to define colors so that you can use them in anytime,
+anywhere in the shell session. To demonstrate this, I am defining <code class="inline">green</code>
+in <code class="inline">.bashrc</code> and accessing its value in <code class="inline">echo</code>.
+The username should appear with white background and green foreground, text color and should be
+surrounded by one space on each side. Note that I am also terminating the color effect by
+appending the value of <code class="inline">endColor</code>.<br>
+<br>
+<u>Extension:</u><br>
+You could define a red color in <code class="">.bashrc</code> and display errors in red color in
+your scripts by doing something similar to the following example:<br>
+<br>
+<code style="display:block;">
+# swap: Swaps contents of two files<br>
+# &nbsp;&nbsp;&nbsp;param1: the file to be swapped<br>
+# &nbsp;&nbsp;&nbsp;param2: the file to be swapped<br>
+function <a href="./bash-swap-two-files.html" title="Code explanation">swap</a>()
+# swap 2 filenames around<br>
+{<br>
+&nbsp;&nbsp;&nbsp;if [[ -e "$1" && -e "$2" ]]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# if files exist<br>
+&nbsp;&nbsp;&nbsp;then<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;local TMPFILE=tmp.$$<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mv "$1" $TMPFILE<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mv "$2" "$1"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mv $TMPFILE "$2"<br>
+&nbsp;&nbsp;&nbsp;else<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo "\e[1;31mError:\e[0m Make sure the files exist."<br>
+&nbsp;&nbsp;&nbsp;fi<br>
+}<br>
+</code>
+<br>
+So when you say something like the following, when the files don't exist:<br>
+<code>swap file1 noFile</code> or <code>swap file1 </code><br>
+you get an error statement highlighting that there has been an error.<br>
+<code><span style="color:red;">Error:</span> Make sure the files exist.</code><br>
+<br>
+You can also customize or colorize your bash prompt. For more information see <a
+href="./bash-customization-of-prompt.html">bash-customization-of-prompt.</a>.
+</span>
+</P>
+<P><B>Attribution:</B><br>
+<span>I explored this myself but the color codes are taken from "/etc/DIR_COLORS"
+(in Cygwin).</span>
+</P>
+</BODY>
+</HTML>
