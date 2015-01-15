@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/markdown3.css">
+</head>
+<p>ip link add link eth0 name macvtap0 type macvtap mode bridge
+  qemu-kvm -nographic -kernel /boot/vmlinuz-guest     -append "console=ttyS0 root=/dev/vda"     -drive file=/tmp/testroot.img,if=virtio,cache=none     -net nic,model=virtio,macaddr=ea:2b:e4:95:ea:f5     -net tap,fd=3 3&lt;>/dev/tap8</p>
+
+<p>-net nic,model=virtio,macaddr=$(&lt; /sys/class/net/macvtap0/address) \
+       -net tap,fd=3 3&lt;>/dev/tap$(&lt; /sys/class/net/macvtap0/ifindex)>)>)</p>

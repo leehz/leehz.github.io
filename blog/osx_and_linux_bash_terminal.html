@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/markdown3.css">
+</head>
+<h2>Mac osX Linux终端的自定义</h2>
+
+<p>对于经常使用终端的用户来说，好的终端配置以及终端信息显示都是有用的甚至是酷的；
+针对bash来说，能定义的东西更多，对osx和linux以及大部分的<code>*inx</code>系统来说，基本都标配<a href="http://gnu.april.org/software/bash/"><code>bash</code></a>; </p>
+
+<ul>
+<li>下载参见 ： <a href="http://ftp.gnu.org/gnu/bash/">bash源码下载</a></li>
+<li>manual在线查看以及下载： <a href="http://gnu.april.org/software/bash/manual/"> gnu bash manual</a></li>
+<li>faq: <a href="ftp://ftp.cwru.edu/pub/bash/FAQ">faq</a></li>
+<li>bashtop: <a href="http://tiswww.case.edu/php/chet/bash/bashtop.html">bashtop</a></li>
+<li>wikimedia: <a href="http://en.wikipedia.org/wiki/Bash">bash@wikimedia</a></li>
+</ul>
+
+<h4>一些有用的参考资料：</h4>
+
+<ul>
+<li><a href="https://wiki.archlinux.org/index.php/Bash">archlinux bash wiki</a> archwiki for bash </li>
+<li><a href="http://ss64.com/osx/">http://ss64.com/osx</a> ---- a commond  manual for osx <code>a-z</code></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/bash.1.html">here is the apple osx manual for bash</a></li>
+<li><a href="http://oreilly.com/pub/a/mac/2004/02/24/bash.html">mac osx bash</a></li>
+<li><a href="http://tldp.org/LDP/abs/html/">advance bash</a></li>
+<li><a href="http://wiki.bash-hackers.org/doku.php">bash hack</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/bashref.html">gnu bash manual</a></li>
+<li><a href="http://www.aosabook.org/en/bash.html">book about bash</a></li>
+</ul>
+
+<!--more-->
+
+<h4>针对bash的补全：</h4>
+
+<ul>
+<li>archlinux： 参见archlinux<a href="https://wiki.archlinux.org">官方wiki</a></li>
+<li><p>mac osx: <a href="http://brew.sh/">homebrew</a></p>
+
+<p>if not install brew, install as follow: 
+<code>ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"</code>
+then change this if you want to use tools from brew: edit <code>/etc/paths</code>; change <code>/usr/local/bin</code> to first</p>
+
+<p>/etc/paths
+<code>
+/usr/local/bin
+/usr/bin
+/bin
+/usr/sbin
+/sbin
+</code></p></li>
+<li><p>安装 bash(非必须，不过osx默认bash版本较老，可以换掉了)、 bash-completion</p>
+
+<blockquote>
+  <p><code>$ brew install bash bash-completion</code>       </p>
+</blockquote></li>
+<li>设置bash加载： 
+add this line to <code>~/.bash_profile</code>
+<code>
+[[ -e /usr/local/etc/bash_completion ]] &amp;&amp; . /usr/local/etc/bash_completion
+</code></li>
+</ul>
+
+<h4>终端bash环境PS1</h4>
+
+<ul>
+<li><p>Mac默认的终端:</p>
+
+<blockquote>
+  <p><code>PS1='\h:\W \u\$ '</code>  =====>  <code>/etc/bashrc</code></p>
+</blockquote>
+
+<p><code>huaixiaozs-Mac-BookPro:~ huaixiaoz$ -</code></p></li>
+<li><p>archlinux终端：</p>
+
+<blockquote>
+  <p><code>PS1='[\u@\h \W]\$ '</code> =====> <code>/etc/bashrc</code></p>
+</blockquote>
+
+<p><code>[huaixiaoz@archlinux ~]$ _</code></p></li>
+</ul>
+
+<h2>Now is our custorm PS1</h2>
+
+<ol>
+<li><p><code>PS1='\[\e[1;32m\][\u@\h \W]\$\[\e[0m\] '</code></p>
+
+<blockquote>
+  <p><img src="http://huaixiaoz-uploads.stor.sinaapp.com/3746358481.png" alt="ps1 _01" title="" /></p>
+</blockquote></li>
+<li><p><code>PS1='\[\e[1;31m\][\u@\h \W]\$\[\e[0m\] '</code></p>
+
+<blockquote>
+  <p><img src="http://huaixiaoz-uploads.stor.sinaapp.com/3901079912.png" alt="ps1 _02" title="" />    </p>
+</blockquote></li>
+<li><code>PS1="\[\033[0;37m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] &amp;&amp; echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[0;31m\]\h'; else echo '\[\033[0;33m\]\u\[\033[0;37m\]@\[\033[0;96m\]\h'; fi)\[\033[0;37m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;37m\]]\n\[\033[0;37m\]\342\224\224\342\224\200\342\224\200\342\225\274 \[\033[0m\]"</code>
+<blockquote>
+  <p><img src="http://huaixiaoz-uploads.stor.sinaapp.com/3110898162.png" alt="ps1" title="" /></li>
+<li><code>PS1="\n\[\033[1;37m\]\342\224\214($(if [[ ${EUID} == 0 ]]; then echo '\[\033[01;31m\]\h'; else echo '\[\033[01;34m\]\u@\h'; fi)\[\033[1;37m\])\342\224\200(\$(if [[ \$? == 0 ]]; then echo \"\[\033[01;32m\]\342\234\223\"; else echo \"\[\033[01;31m\]\342\234\227\"; fi)\[\033[1;37m\])\342\224\200(\[\033[1;34m\]\@ \d\[\033[1;37m\])\[\033[1;37m\]\n\342\224\224\342\224\200(\[\033[1;32m\]\w\[\033[1;37m\])\342\224\200(\[\033[1;32m\]\$(ls -1 | wc -l | sed 's: ::g') files, \$(ls -sh | head -n1 | sed 's/total //')b\[\033[1;37m\])\342\224\200&gt; \[\033[0m\]"</code>
+<img src="http://huaixiaoz-uploads.stor.sinaapp.com/3751989405.png" alt="ps1" title="" /></li>
+</ol>
+
+<p>上面的<a href="https://wiki.archlinux.org/index.php/System%27s_Color_Bash_Prompt">PS1配置来源</a></p>
+</blockquote></p>
+
+<hr />
+
+<p>还有更多自定义的PS1和更多的bash特性，在此不一一列举了，</p>
+
+<p>Useful links: </p>
+
+<ul>
+<li><a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/">Apple osx manuals</a></li>
+</ul>

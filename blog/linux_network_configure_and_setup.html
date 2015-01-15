@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/markdown3.css">
+</head>
+<h3>linux network tools</h3>
+
+<p>```</p>
+
+<h1>: dpkg --search <code>which ifconfig</code> (rpm  : search it with you hand)</h1>
+
+<p>```
+1.  net-tools: /sbin/ifconfig
+2.  iproute2: /sbin/ip
+3. network-manager: /usr/bin/nmcli
+4. isc-dhcp-client: /sbin/dhclient
+and so on ...</p>
+
+<h3>wireless-tools: /sbin/iwconfig</h3>
+
+<p>you can find more information in <a href="https://wiki.archlinux.org">archlinux wiki</a> 
+And <a href="https://wiki.archlinux.org/index.php/Wireless_network_configuration">here is </a> the wireless network setup.
+1.  iw dev waln0 link : check the status of the wlan0
+2. # iw dev wlan0 connect "your<em>essid" key 0:your</em>key
+ or: # iw dev wlan0 connect "your<em>essid" key d:2:your</em>key
+3.  wpa<em>supplicant -D nl80211,wext -i wlan0 -c &lt;(wpa</em>passphrase "your<em>SSID" "your</em>key")
+4. get the ip for wlan0: dhcpcd wlan0 or dhclient -4 waln0</p>
+
+<h3>stop the networkmanager (ubuntu)</h3>
+
+<p>$ sudo /etc/init.d/network-manager stop
+$ sudo update-rc.d network-manager remove </p>
+
+<p><em>*OR: *</em>
+$ sudo stop network-manager
+$ echo "manual" | sudo tee /etc/init/network-manager.override </p>
+
+<p>ARCHLINUX:
+ $ sudo systemctl stop NetworkManager.service
+$ sudo systemctl disable NetworkManager.service </p>
+
+<h3>/etc/network/interfaces setup</h3>
+
+<p>```</p>
+
+<h1>interfaces(5) file used by ifup(8) and ifdown(8)</h1>
+
+<p>auto lo
+iface lo inet loopback</p>
+
+<h1>auto eth0</h1>
+
+<h1>iface eth0 inet dhcp</h1>
+
+<h1>add by hz</h1>
+
+<p>auto waln0
+iface wlan0 inet dhcp</p>
+
+<p>auto br0
+iface br0 inet dhcp
+    bridge<em>ports eth0
+    bridge</em>stp off
+    bridge_maxwait 0
+    bridge-fd 0</p>
+
+<p>```</p>
+
+<p>and some useful commond：
+```</p>
+
+<h1>auto eth0</h1>
+
+<h1>iface eth0 inet dhcp</h1>
+
+<h1>auto br0</h1>
+
+<h1>iface br0 inet dhcp</h1>
+
+<h1>pre-up tunctl -t tap0 -u hz -g hz</h1>
+
+<h1>pre-up ip link set dev eth0 down</h1>
+
+<h1>pre-up brctl addbr br0</h1>
+
+<h1>pre-up brctl addif br0 eth0</h1>
+
+<h1>pre-up brctl addif br0 tap0</h1>
+
+<h1>pre-up ip link set dev tap0 up</h1>
+
+<h1>up chmod 0666 /dev/net/tun</h1>
+
+<h1>post-down ip link set dev tap0 down</h1>
+
+<h1>post-down ip link set dev br0 down</h1>
+
+<h1>post-down brctl delif br0 eth0</h1>
+
+<h1>post-down brctl delif br0 tap0</h1>
+
+<h1>post-down brctl delbr br0</h1>
+
+<pre><code>#bridge_ports eth0
+#bridge_fd 0
+#bridge_maxpage 12
+#bridge_stp off
+</code></pre>
+
+<p>```</p>
+
+<p><a href="https://help.ubuntu.com/community/KVM/Directly">https://help.ubuntu.com/community/KVM/Directly</a>
+<a href="http://www.h7.dion.ne.jp/~qemu-win/HowToNetwork-en.html#card">http://www.h7.dion.ne.jp/~qemu-win/HowToNetwork-en.html#card</a></p>

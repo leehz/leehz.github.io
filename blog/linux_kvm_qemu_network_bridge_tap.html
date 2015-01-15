@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/markdown3.css">
+</head>
+<ol>
+<li>userspace network : <code>-net nic,model=virtio,macaddr=xx-xx-xx-xx-xx -net user</code></li>
+<li>bridge network: <code>-net nic,xxxx  -net  -tap</code></li>
+</ol>
+
+<h3>Kvm network bridge tap</h3>
+
+<ol>
+<li>edit <em>/etc/network/interfaces</em>
+Install  :
+<code>sudo apt-get install bridge-utils  uml-utilities</code></li>
+</ol>
+
+<p>```
+auto lo
+iface lo inet loopback</p>
+
+<h1>auto eth0</h1>
+
+<h1>iface eth0 inet dhcp</h1>
+
+<h1>add by hz</h1>
+
+<p>auto waln0
+iface wlan0 inet dhcp</p>
+
+<p>auto br0
+iface br0 inet dhcp
+    bridge<em>ports eth0
+    bridge</em>stp off
+    bridge_maxwait 0
+    bridge-fd 0</p>
+
+<p><code>``
+2. edit</code>/etc/qemu-ifup`</p>
+
+<p>```
+ip=$(which ip)</p>
+
+<p>if [ -n "$ip" ]; then
+   ip link set "$1" up
+else
+   brctl=$(which brctl)
+   if [ ! "$ip" -o ! "$brctl" ]; then
+     echo "W: $0: not doing any bridge processing: neither ip nor brctl utility not found" >&amp;2
+     exit 0
+   fi
+   ifconfig "$1" 0.0.0.0 up
+fi</p>
+
+<p>switch=$(ip route ls | \
+    awk '/^default / {
+          for(i=0;i<NF;i++) { if ($i == "dev") { print $(i+1); next; } }
+         }'
+        )
+switch=br0</p>
+
+<h1>only add the interface to default-route bridge if we</h1>
+
+<h1>have such interface (with default route) and if that</h1>
+
+<h1>interface is actually a bridge.</h1>
+
+<h1>It is possible to have several default routes too</h1>
+
+<p>for br in $switch; do
+    if [ -d /sys/class/net/$br/bridge/. ]; then
+        if [ -n "$ip" ]; then
+          ip link set "$1" master "$br"
+        else
+          brctl addif $br "$1"
+        fi
+        exit    # exit with status of the previous command
+    fi
+done
+```</p>
+
+<p>you can follow <a href="www.linux-kvm.org/page/Networking">this link</a> to get it</p>
+
+<h3>Start the KVM</h3>
+
+<p>```
+kvm -smp 4 -m 2048 -name f15 -drive file=~/cn<em>winxp</em>pro<em>sp3</em>x32.4G.qcow2,if=virtio -vga qxl  -net nic,model=virtio,macaddr=00-11-22-33-55-44 -net tap  -localtime -soundhw es1370 -spice port=5900,addr=192.168.3.148,disable-ticketing</p>
+
+<p>```</p>
